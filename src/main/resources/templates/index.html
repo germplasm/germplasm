@@ -1,0 +1,24 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" xmlns:float="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>陕西种质资源管理系统</title>
+<link rel="shortcut icon" href="images/favicon.ico" />
+<link href="css/css.css" type="text/css" rel="stylesheet" />
+</head>
+<!--框架样式-->
+<frameset rows="95,*,30" cols="*" frameborder="no" border="0" framespacing="0">
+<!--top样式-->
+	<frame src="http://localhost:8083/top" name="topframe" scrolling="no" noresize="" id="topframe" title="topframe" />
+<!--contact样式-->
+	<frameset id="attachucp" framespacing="0" border="0" frameborder="no" cols="194,12,*" rows="*">
+		<frame scrolling="auto" noresize="" frameborder="no" name="leftFrame" src="http://localhost:8083/left"></frame>
+		<frame id="leftbar" scrolling="no" noresize="" name="switchFrame" src="http://localhost:8083/swich"></frame>
+		<frame scrolling="auto" noresize="" border="0" name="mainFrame" src="http://localhost:8083/main"></frame>
+	</frameset>
+<!--bottom样式-->
+	<frame src="http://localhost:8083/bottom" name="bottomFrame" scrolling="No" noresize="noresize" id="bottomFrame" title="bottomFrame" />
+</frameset><noframes></noframes>
+<!--不可以删除-->
+</html>
