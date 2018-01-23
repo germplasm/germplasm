@@ -1,0 +1,165 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>主要内容区main</title>
+    <link href="css/css.css" type="text/css" rel="stylesheet" />
+    <link href="css/main.css" type="text/css" rel="stylesheet" />
+    <link rel="shortcut icon" href="images/main/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="themes/icon.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.easyui.min.js"></script>
+    <script src="js/easyui-lang-zh_CN.js"></script>
+    <style>
+        body{overflow-x:hidden; background:#f2f0f5; padding:15px 0px 10px 5px;}
+    </style>
+</head>
+<body>
+
+<table id="dg" class="easyui-datagrid" title="用户列表" style="width:100% ;height: auto;" fitcolumns="false" scrollbarSize :0
+       data-options="iconCls: 'icon-edit',
+				singleSelect: true,
+				toolbar: '#tb',
+				url: '/user/userLists',
+				method: 'get',
+				onClickRow: onClickRow,
+				onEndEdit: onEndEdit" rownumbers="true" pagination="true">
+    <thead>
+    <tr>
+        <th data-options="field:'id',hidden:'true'">ID</th>
+        <th style="width: 25%;height:auto;" data-options="field:'loginName',editor:'textbox'">登录名</th>
+        <th style="width: 25%;height:auto;" data-options="field:'descript',
+                    formatter:function(value,row){
+							return row.descript;
+						},
+					editor:{
+						type:'combobox',
+						options:{
+							valueField:'id',
+							textField:'descript',
+							url:'/role/idDesc',
+							required:true
+						}
+					}" >角色</th>
+        <th style="width: 25%;height:auto;" data-options="field:'unite',editor:'textbox'">所属单位</th>
+        <th style="width: 25%;height:auto;" data-options="field:'areaName'">所属地</th>
+    </tr>
+    </thead>
+</table>
+
+<div id="tb" style="height:auto">
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">增加</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>
+    <!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">GetChanges</a>-->
+</div>
+
+<script type="text/javascript">
+    var editIndex = undefined;
+    function endEditing(){
+        if (editIndex == undefined){return true}
+        if ($('#dg').datagrid('validateRow', editIndex)){
+            var ed = $('#dg').datagrid('getEditor', {index:editIndex,field:'id'});
+            var descript = $(ed.target).combobox('getText');
+            $('#dg').datagrid('getRows')[editIndex]['descript'] = descript;
+            $('#dg').datagrid('endEdit', editIndex);
+            editIndex = undefined;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function onClickRow(index){
+        if (editIndex != index){
+            if (endEditing()){
+                $('#dg').datagrid('selectRow', index)
+                        .datagrid('beginEdit', index);
+                editIndex = index;
+            } else {
+                $('#dg').datagrid('selectRow', editIndex);
+            }
+        }
+    }
+    function onClickCell(index, field){
+        if (editIndex != index){
+            if (endEditing()){
+                $('#dg').datagrid('selectRow', index)
+                        .datagrid('beginEdit', index);
+                var ed = $('#dg').datagrid('getEditor', {index:index,field:field});
+                if (ed){
+                    ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+                }
+                editIndex = index;
+            } else {
+                setTimeout(function(){
+                    $('#dg').datagrid('selectRow', editIndex);
+                },0);
+            }
+        }
+    }
+    function onEndEdit(index, row){
+        var ed = $(this).datagrid('getEditor', {
+            index: index,
+            field: 'id'
+        });
+        row.descript = $(ed.target).combobox('getText');
+    }
+    function append(){
+        if (endEditing()){
+            $('#dg').datagrid('appendRow',{status:'P'});
+            editIndex = $('#dg').datagrid('getRows').length-1;
+            $('#dg').datagrid('selectRow', editIndex)
+                    .datagrid('beginEdit', editIndex);
+        }
+    }
+    function removeit(){
+        if (editIndex == undefined){return}
+        var row = $('#dg').datagrid('getSelected');
+        if(row){
+            alert(row.id);
+        }
+
+        $('#dg').datagrid('cancelEdit', editIndex)
+                .datagrid('deleteRow', editIndex);
+
+        editIndex = undefined;
+    }
+    function accept(){
+        if (endEditing()){
+            $('#dg').datagrid('acceptChanges');
+        }
+    }
+    function reject(){
+        $('#dg').datagrid('rejectChanges');
+        editIndex = undefined;
+    }
+    function getChanges(){
+        var rows = $('#dg').datagrid('getChanges');
+        alert(rows.length+' rows are changed!');
+    }
+</script>
+<!--<div class="easyui-layout" fit="true">
+    <div id="userDatagridToolbar" region="north" border="false"
+         style="border-bottom: 1px solid #ddd; height: 32px; padding: 2px 5px; background: #fafafa;">
+        <div style="float: left;">
+            <a href="javascript:;" onclick="javascript:$('#userDatagrid').datagrid('addRow')"
+               class="easyui-linkbutton c1" iconCls="icon-add">添加</a> <a href="javascript:;"
+                                                                         onclick="javascript:$('#userDatagrid').datagrid('saveRow')" class="easyui-linkbutton c2"
+                                                                         iconCls="icon-save">保存</a> <a href="javascript:;"
+                                                                                                       onclick="javascript:$('#userDatagrid').datagrid('destroyRow')" class="easyui-linkbutton c3"
+                                                                                                       iconCls="icon-remove">删除</a> <a href="javascript:;"
+                                                                                                                                       onclick="javascript:$('#userDatagrid').datagrid('cancelRow')" class="easyui-linkbutton c4"
+                                                                                                                                       iconCls="icon-cancel">取消</a><a href="javascript:;"
+                                                                                                                                                                      onclick="javascript:$('#userDatagrid').datagrid('reload')" class="easyui-linkbutton c5"
+                                                                                                                                                                      iconCls="icon-reload">刷新</a>
+        </div>-->
+        <!--<div style="float: right">
+            <form method="get">
+                关键字：<input name="q" size="10" /> <a href="javascript:;"
+                                                    onclick="javascript:$('#userDatagrid').datagrid('load', {q : $('input[name=q]').val()});"
+                                                    class="easyui-linkbutton c5" iconCls="icon-search">搜索</a>
+            </form>
+        </div>-->
+
+</body>
+</html>

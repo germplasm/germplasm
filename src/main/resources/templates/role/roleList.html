@@ -1,0 +1,36 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>主要内容区main</title>
+    <link href="css/css.css" type="text/css" rel="stylesheet" />
+    <link href="css/main.css" type="text/css" rel="stylesheet" />
+    <link rel="shortcut icon" href="images/main/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="themes/icon.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.easyui.min.js"></script>
+    <script src="js/easyui-lang-zh_CN.js"></script>
+    <style>
+        body{overflow-x:hidden; background:#f2f0f5; padding:15px 0px 10px 5px;}
+    </style>
+</head>
+<body>
+
+<table id="dg" class="easyui-datagrid" title="角色列表" style="width:100% ;height: auto;" fitcolumns="false" scrollbarSize :0
+       data-options="iconCls: 'icon-edit',
+				singleSelect: true,
+				toolbar: '#tb',
+				url: '/role/roles',
+				method: 'get'"
+       rownumbers="true" pagination="true">
+    <thead>
+    <tr>
+        <th style="width: 33%;height:auto;" data-options="field:'roleName',editor:'textbox'">角色名</th>
+        <th style="width: 33%;height:auto;" data-options="field:'descript',editor:'textbox'">职责</th>
+        <th style="width: 33%;height:auto;" data-options="field:'level'">所属地</th>
+    </tr>
+    </thead>
+</table>
+
+</body>
+</html>
